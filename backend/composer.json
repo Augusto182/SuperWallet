@@ -1,12 +1,14 @@
 {
-    "name": "augustorm/superwallet",
+    "name": "superwallet/superwallet",
     "require": {
-        "doctrine/orm": "^2.8",
-        "doctrine/dbal": "^3.2"
+        "doctrine/orm": "^2.16.2",
+        "doctrine/dbal": "^3.2",
+        "symfony/cache": "^5.4"
     },
     "autoload": {
         "psr-4": {
-            "MyDoctrineProject\\": "src/"
+            "SuperWallet\\": "src/"
         }
     }
 }
+

@@ -1,25 +1,20 @@
 <?php
-// backend/bootstrap.php
-
+// bootstrap.php
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
-require_once 'vendor/autoload.php';
-require_once __DIR__ . '/../config/doctrine.php';
-
-$isDevMode = true;
-$config = Setup::createAnnotationMetadataConfiguration(
-    [__DIR__."/src"],
-    $isDevMode
+require_once __DIR__ . '/vendor/autoload.php';
+$doctrineConfig = require_once __DIR__ . '/config/doctrine.php';
+$entityPaths = [__DIR__ . '/src/Entity/'];
+// Create a simple "default" Doctrine ORM configuration for Attributes
+$config = ORMSetup::createAttributeMetadataConfiguration(
+    paths: $entityPaths,
+    isDevMode: $doctrineConfig['dev_mode'],
 );
 
-$conn = [
-    'driver' => 'pdo_mysql',
-    'host' => 'localhost',
-    'user' => 'your_username',
-    'password' => 'your_password',
-    'dbname' => 'your_database',
-];
+// configuring the database connection
+$connection = DriverManager::getConnection($doctrineConfig['db'], $config);
 
-$entityManager = EntityManager::create($conn, $config);
+// obtaining the entity manager
+$entityManager = new EntityManager($connection, $config);

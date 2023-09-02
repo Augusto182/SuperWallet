@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://api.superwallet.loc/backend/soap/soap_server.php"
+    targetNamespace="http://api.superwallet.loc/backend/soap/soap_server.php">
+    
+    <!-- Define the types (data structures) used in the service -->
+    <types>
+        <xsd:schema targetNamespace="http://api.superwallet.loc/backend/soap/soap_server.php">
+            <xsd:element name="registerClientRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="document" type="xsd:integer"/>
+                        <xsd:element name="mail" type="xsd:string"/>
+                        <xsd:element name="phone" type="xsd:integer"/>
+                        <xsd:element name="name" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="registerClientResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="code" type="xsd:integer"/>
+                        <xsd:element name="message" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+    
+    <!-- Define the service and port -->
+    <message name="registerClientRequestMessage">
+        <part name="parameters" element="tns:registerClientRequest"/>
+    </message>
+    <message name="registerClientResponseMessage">
+        <part name="parameters" element="tns:registerClientResponse"/>
+    </message>
+    
+    <portType name="SuperWalletSOAPPortType">
+        <operation name="registerClient">
+            <input message="tns:registerClientRequestMessage"/>
+            <output message="tns:registerClientResponseMessage"/>
+        </operation>
+    </portType>
+    
+    <binding name="SuperWalletSOAPBinding" type="tns:SuperWalletSOAPPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="registerClient">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    
+    <service name="SuperWalletSOAP">
+        <port name="SuperWalletSOAPPort" binding="tns:SuperWalletSOAPBinding">
+            <soap:address location="http://api.superwallet.loc/backend/soap/soap_server.php"/>
+        </port>
+    </service>
+</definitions>

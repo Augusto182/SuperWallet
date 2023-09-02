@@ -1,0 +1,9 @@
+<?php
+// check_annotations.php
+
+if (extension_loaded('annotations')) {
+    echo "The 'annotations' extension is enabled in your PHP configuration.";
+} else {
+    echo "The 'annotations' extension is not enabled in your PHP configuration.";
+}
+?>

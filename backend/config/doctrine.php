@@ -4,11 +4,12 @@ return [
   'db' => [
     'driver'   => 'pdo_mysql',
     'host' => 'localhost',
-    'username' => 'root',
+    'user' => 'root',
     'password' => 'felicidad',
     'dbname' => 'superwallet'
   ],
   'entity_paths' => [
-    __DIR__ . '/../backend/src/Entity',
+    __DIR__ . '/../src/Entity',
   ],
+  'dev_mode' => TRUE,
 ];
