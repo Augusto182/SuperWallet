@@ -29,22 +29,30 @@ class SuperWalletSOAP {
      *   - 'message' (string): Response message.
      */
     public function registerClient($document, $mail, $phone, $name) {
-        // Create a new Client entity
-        $client = new Client();
-        $client->setDocument($document);
-        $client->setMail($mail);
-        $client->setPhone($phone);
-        $client->setName($name);
+        try {
+          // Create a new Client entity
+          $client = new Client();
+          $client->setDocument($document);
+          $client->setMail($mail);
+          $client->setPhone($phone);
+          $client->setName($name);
   
-        // Persist the Client entity to the database
-        $this->entityManager->persist($client);
-        $this->entityManager->flush();
-  
-        // Return a response
-        return [
-          'code' => 200,
-          'message' => 'Client registered successfully.',
-        ];
+          // Persist the Client entity to the database
+          $this->entityManager->persist($client);
+          $this->entityManager->flush();
+            
+          return [
+            'code' => 200,
+            'message' => 'Client registered successfully.',
+          ];
+        }
+        catch (\Exception $e) {
+          
+          return [
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+          ];
+        }
       }
   
       /**

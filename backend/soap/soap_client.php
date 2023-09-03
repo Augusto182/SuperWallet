@@ -4,7 +4,11 @@
 try {
 
   $wsdl = 'http://api.superwallet.loc/soap/soap_server.wsdl';
-  $client = new SoapClient($wsdl,['cache_wsdl' => WSDL_CACHE_NONE, 'location' => 'http://api.superwallet.loc/soap/soap_server.php']);
+  $client = new SoapClient($wsdl,[
+    'cache_wsdl' => WSDL_CACHE_NONE,
+    'location' => 'http://api.superwallet.loc/soap/soap_server.php',
+    'trace' => TRUE,
+  ]);
 
   // Get the SOAP response headers
   // $responseHeaders = $client->__getLastResponseHeaders();
@@ -18,6 +22,8 @@ try {
     'phone' => 1234567890,
     'name' => 'John Doe',
   ]);
+
+  $rawResult = $client->__getLastResponse();
 
   // Process the SOAP response
   print_r($response);
