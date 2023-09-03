@@ -1,15 +1,12 @@
 {
-    "name": "superwallet/superwallet",
+    "type": "project",
+    "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "doctrine/annotations": "^2.0",
-        "doctrine/dbal": "^3.2",
-        "doctrine/orm": "^2.16.2",
-        "symfony/cache": "^6.2",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
@@ -17,11 +14,7 @@
         "symfony/runtime": "6.3.*",
         "symfony/yaml": "6.3.*"
     },
-    "autoload": {
-        "psr-4": {
-            "SuperWallet\\": "src/",
-            "App\\": "src/"
-        }
+    "require-dev": {
     },
     "config": {
         "allow-plugins": {
@@ -30,6 +23,11 @@
             "symfony/runtime": true
         },
         "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {

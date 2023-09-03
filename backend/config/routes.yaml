@@ -1,0 +1,9 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# Include the routes from api.yaml
+api:
+    resource: 'routes/api.yaml'

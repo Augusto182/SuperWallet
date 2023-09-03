@@ -1,0 +1,5 @@
+# config/routes/api.yaml
+register_client:
+    path: /api/registerclient
+    controller: App\Controller\RegisterClientController::registerclient
+    methods: [POST]
