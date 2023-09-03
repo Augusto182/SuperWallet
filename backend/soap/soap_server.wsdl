@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-    xmlns:tns="http://api.superwallet.loc/backend/soap/soap_server.php"
-    targetNamespace="http://api.superwallet.loc/backend/soap/soap_server.php">
-    
+    xmlns:tns="http://api.superwallet.loc/soap/soap_server.wsdl"
+    targetNamespace="http://api.superwallet.loc/soap/soap_server.wsdl">
+
+     <!-- Import XML Schema namespace -->
+    <import namespace="http://www.w3.org/2001/XMLSchema" schemaLocation="http://www.w3.org/2001/XMLSchema.xsd"/>
+
     <!-- Define the types (data structures) used in the service -->
     <types>
-        <xsd:schema targetNamespace="http://api.superwallet.loc/backend/soap/soap_server.php">
+        <xsd:schema targetNamespace="http://api.superwallet.loc/soap/soap_server.wsdl"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <!-- Define the input message for 'registerClient' operation -->
             <xsd:element name="registerClientRequest">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -17,6 +22,8 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+
+            <!-- Define the output message for 'registerClient' operation -->
             <xsd:element name="registerClientResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -27,24 +34,28 @@
             </xsd:element>
         </xsd:schema>
     </types>
-    
+
+
     <!-- Define the service and port -->
     <message name="registerClientRequestMessage">
         <part name="parameters" element="tns:registerClientRequest"/>
     </message>
+    
     <message name="registerClientResponseMessage">
         <part name="parameters" element="tns:registerClientResponse"/>
     </message>
-    
+
     <portType name="SuperWalletSOAPPortType">
+        <!-- Add the 'registerClient' operation -->
         <operation name="registerClient">
             <input message="tns:registerClientRequestMessage"/>
             <output message="tns:registerClientResponseMessage"/>
         </operation>
     </portType>
-    
+
     <binding name="SuperWalletSOAPBinding" type="tns:SuperWalletSOAPPortType">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <!-- Add the 'registerClient' operation -->
         <operation name="registerClient">
             <soap:operation soapAction=""/>
             <input>
@@ -55,10 +66,10 @@
             </output>
         </operation>
     </binding>
-    
+
     <service name="SuperWalletSOAP">
         <port name="SuperWalletSOAPPort" binding="tns:SuperWalletSOAPBinding">
-            <soap:address location="http://api.superwallet.loc/backend/soap/soap_server.php"/>
+            <soap:address location="http://api.superwallet.loc/soap/soap_server.php"/>
         </port>
     </service>
 </definitions>

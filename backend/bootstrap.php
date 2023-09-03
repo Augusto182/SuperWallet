@@ -18,3 +18,6 @@ $connection = DriverManager::getConnection($doctrineConfig['db'], $config);
 
 // obtaining the entity manager
 $entityManager = new EntityManager($connection, $config);
+
+// Create the SuperWalletSOAP object
+// $superWalletSoap = new SuperWalletSOAP();
