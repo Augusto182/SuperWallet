@@ -12,7 +12,7 @@
         <xsd:schema targetNamespace="http://api.superwallet.loc/soap/soap_server.wsdl"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
             <!-- Define the input message for 'registerClient' operation -->
-            <xsd:element name="registerClientRequest">
+            <xsd:element name="registerClient">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="document" type="xsd:integer"/>
@@ -37,8 +37,8 @@
 
 
     <!-- Define the service and port -->
-    <message name="registerClientRequestMessage">
-        <part name="parameters" element="tns:registerClientRequest"/>
+    <message name="registerClientMessage">
+        <part name="parameters" element="tns:registerClient"/>
     </message>
     
     <message name="registerClientResponseMessage">
@@ -48,7 +48,7 @@
     <portType name="SuperWalletSOAPPortType">
         <!-- Add the 'registerClient' operation -->
         <operation name="registerClient">
-            <input message="tns:registerClientRequestMessage"/>
+            <input message="tns:registerClientMessage"/>
             <output message="tns:registerClientResponseMessage"/>
         </operation>
     </portType>
