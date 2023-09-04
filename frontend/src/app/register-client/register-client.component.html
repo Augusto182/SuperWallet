@@ -1,0 +1,29 @@
+<div class="container">
+    <h2>Register Client</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="formData.name" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="formData.phone" required>
+      </div>
+      <div class="form-group">
+        <label for="id">ID:</label>
+        <input type="text" class="form-control" id="id" name="id" [(ngModel)]="formData.id" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="formData.email" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div *ngIf="showSuccessMessage" class="alert alert-success mt-3">
+      Client registered successfully.
+    </div>
+    <div *ngIf="showErrorMessage" class="alert alert-danger mt-3">
+      An error occurred. Please try again.
+    </div>
+  </div>
+  
