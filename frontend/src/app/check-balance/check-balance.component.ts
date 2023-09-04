@@ -12,16 +12,19 @@ export class CheckBalanceComponent {
     document: '',
   };
 
+  balance: string = ''; 
+
   showSuccessMessage = false;
   showErrorMessage = false;
+  showClientNotFoundMessage = false;
 
   constructor(private http: HttpClient) {}
 
   onSubmit() {
     this.showSuccessMessage = false;
     this.showErrorMessage = false;
+    this.showClientNotFoundMessage = false;
 
-    // Send a POST request to the API with the form data
     const headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
@@ -29,18 +32,35 @@ export class CheckBalanceComponent {
       .set("phone", this.formData.phone)
       .set("document", this.formData.document);
     var options = { headers: headers, params:queryParams };
-    this.http.get('http://rest.superwallet.loc/api/checkbalance', options).subscribe({
+    this.http.get<{ balance: string }>('http://rest.superwallet.loc/api/checkbalance', options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);
+        this.balance = response.balance;
         this.showSuccessMessage = true;
       },
       error: (error) => {
         // Error callback
-        this.showErrorMessage = true;
-        console.error('Error:', error);
+        if (error.error.code == "404" && error.error.message == "Client not found.") {
+          this.showClientNotFoundMessage = true;
+        }
+        else {
+          this.showErrorMessage = true;
+        }
       },
     });
 
   }
+
+  onDoneClick() {
+    // Reset form data and hide the success message
+    this.formData = {
+      phone: '',
+      document: '',
+    };
+    this.showSuccessMessage = false;
+    this.showErrorMessage = false;
+    this.showClientNotFoundMessage = false;
+  }
+
 }

@@ -32,24 +32,14 @@ class LoadWalletController {
 
         try {
           $this->soapClient->init();
-          $response = $this->soapClient->instance->loadwallet([
+          $response = $this->soapClient->instance->loadWSallet([
             'document' => $data['document'],
             'phone' => $data['phone'],
             'value' => $data['value'],
           ]);
 
-          $rawResult = $this->soapClient->instance->__getLastResponse();
-          $x = $this->soapClient->XML2Array($rawResult);
-          $code = $x["SOAP-ENV_Body"]["ns1_loadWalletResponse"]["return"]["item"][0]["value"] ?? 0;
-          $message = $x["SOAP-ENV_Body"]["ns1_loadWalletResponse"]["return"]["item"][1]["value"] ?? 'unknown';
-          if ($code == 200) {
-            $code = Response::HTTP_CREATED;
-          }
-
-          $response = [
-            'code' => $code,
-            'message' => $message,
-          ];
+          $response = $this->soapClient->getResponse('loadWallet');
+          $code = $response['code'] ?? 500;
         }
         catch (SoapFault $e) {
           $code = $e->getCode();

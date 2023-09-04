@@ -24,26 +24,22 @@ class CheckBalanceController {
 
     #[Route("checkbalance", name: "checkbalance", methods: ["GET"])]
     public function checkbalance(Request $request): JsonResponse {
-        $data = json_decode($request->getContent(), TRUE);
+        $phone = $request->get('phone');
+        $document = $request->get('document');
 
-        // if (empty($data['name']) || empty($data['document']) || empty($data['mail']) || empty($data['phone']) ) {
-        //   throw new NotFoundHttpException('Expecting mandatory parameters!');
-        // }
+        if (empty($phone) || empty($document)) {
+          throw new NotFoundHttpException('Expecting mandatory parameters!');
+        }
 
         try {
-          // $this->soapClient->init();
-          // $response = $this->soapClient->instance->CheckBalance([
-          //   'document' => $data['document'],
-          //   'mail' => $data['mail'],
-          //   'phone' => $data['phone'],
-          //   'name' => $data['name'],
-          // ]);
-
-          $code = Response::HTTP_CREATED;
-          $response = [
-            'code' => $code,
-            'message' => 'Client registered successfully xD.',
-          ];
+          $this->soapClient->init();
+          $response = $this->soapClient->instance->checkBalance([
+            'document' => $document,
+            'phone' => $phone,
+          ]);
+ 
+          $response = $this->soapClient->getResponse('checkBalance');
+          $code = $response['code'] ?? 500;
         }
         catch (SoapFault $e) {
           $code = $e->getCode();

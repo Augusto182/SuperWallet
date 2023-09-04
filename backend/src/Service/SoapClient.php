@@ -22,6 +22,20 @@ class SoapClientService {
   }
   
   /**
+   * getResponse
+   */
+  public function getResponse($operation) {
+    $response = [];
+    $tag = "ns1_" . $operation . "Response";
+    $rawResult = $this->instance->__getLastResponse();
+    $x = $this->XML2Array($rawResult);
+    foreach ($x["SOAP-ENV_Body"][$tag]["return"]["item"] as $item) {
+      $response[$item['key']] = $item['value'];
+    }
+    return $response;
+  }
+
+  /**
    * XML2Array
    */
   public function XML2Array($xml) {

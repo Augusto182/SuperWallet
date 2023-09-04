@@ -16,10 +16,9 @@ try {
   // $responseContent = $client->__getLastResponse();
 
   // Call SOAP methods using the client
-  $response = $client->loadWallet([
+  $response = $client->checkBalance([
     'document' => 123456789,
     'phone' => 555555555,
-    'value' => 10000,
   ]);
 
   $rawResult = $client->__getLastResponse();

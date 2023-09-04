@@ -55,6 +55,28 @@
                 </xsd:complexType>
             </xsd:element>
 
+
+            <!-- Define the input message for 'checkBalance' operation -->
+            <xsd:element name="checkBalance">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="document" type="xsd:integer"/>
+                        <xsd:element name="phone" type="xsd:integer"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Define the output message for 'loadWallet' operation -->
+            <xsd:element name="checkBalanceResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="balance" type="xsd:float"/>
+                        <xsd:element name="code" type="xsd:integer"/>
+                        <xsd:element name="message" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
         </xsd:schema>
     </types>
 
@@ -76,6 +98,14 @@
         <part name="parameters" element="tns:loadWalletResponse"/>
     </message>
 
+    <message name="checkBalanceMessage">
+        <part name="parameters" element="tns:checkBalance"/>
+    </message>
+    
+    <message name="checkBalanceResponseMessage">
+        <part name="parameters" element="tns:checkBalanceResponse"/>
+    </message>
+
 
     <portType name="SuperWalletSOAPPortType">
         <!-- Add the 'registerClient' operation -->
@@ -87,6 +117,11 @@
         <operation name="loadWallet">
             <input message="tns:loadWalletMessage"/>
             <output message="tns:loadWalletResponseMessage"/>
+        </operation>
+        <!-- Add the 'checkBalance' operation -->
+        <operation name="checkBalance">
+            <input message="tns:checkBalanceMessage"/>
+            <output message="tns:checkBalanceResponseMessage"/>
         </operation>
     </portType>
 
@@ -102,8 +137,18 @@
                 <soap:body use="literal"/>
             </output>
         </operation>
-        <!-- Add the 'registerClient' operation -->
+        <!-- Add the 'loadWallet' operation -->
         <operation name="loadWallet">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <!-- Add the 'checkBalance' operation -->
+        <operation name="checkBalance">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>

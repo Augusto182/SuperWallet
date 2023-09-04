@@ -117,8 +117,33 @@ class SuperWalletSOAP {
        *   - 'message' (string): Response message.
        */
       public function checkBalance($document, $phone) {
-          // Implement balance checking logic here.
-          // Return the response as an array.
+        try {
+          $client = $this->clientExist($document, $phone);
+          if ($client) {
+            $value = 0;
+            $wallet = $this->walletExist($client->getId());
+            if ($wallet) {
+              $value = $wallet->getValue();
+            }
+            return [
+              'balance' => $value,
+              'code' => 200,
+              'message' => 'Balance successfully readed.',
+            ];
+          }
+          else {
+            throw new \Exception('Client not found.', 404);
+          }
+
+          
+        }
+        catch (\Exception $e) {
+          
+          return [
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+          ];
+        }
       }
   
       /**
