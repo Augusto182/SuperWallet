@@ -39,11 +39,23 @@ class RegisterClientController {
             'name' => $data['name'],
           ]);
 
-          $code = Response::HTTP_CREATED;
+          $rawResult = $this->soapClient->instance->__getLastResponse();
+          $x = $this->soapClient->XML2Array($rawResult);
+          $code = $x["SOAP-ENV_Body"]["ns1_registerClientResponse"]["return"]["item"][0]["value"] ?? 0;
+          $message = $x["SOAP-ENV_Body"]["ns1_registerClientResponse"]["return"]["item"][1]["value"] ?? 'unknown';
+          if ($code == 200) {
+            $code = Response::HTTP_CREATED;
+          }
+
           $response = [
             'code' => $code,
-            'message' => 'Client registered successfully xD.',
+            'message' => $message,
           ];
+
+          //$xml = simplexml_load_string($rawResult);
+          //$xml->registerXPathNamespace("soap", "http://www.w3.org/2003/05/soap-envelope");
+          //$result = $xml->xpath('//soap:Body');
+
         }
         catch (SoapFault $e) {
           $code = $e->getCode();

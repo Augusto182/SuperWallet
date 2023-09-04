@@ -68,8 +68,40 @@ class SuperWalletSOAP {
        *   - 'message' (string): Response message.
        */
       public function loadWallet($document, $phone, $value) {
-          // Implement wallet loading logic here.
-          // Return the response as an array.
+        try {
+          $client = $this->clientExist($document, $phone);
+          if ($client) {
+            $old_value = 0;
+            $wallet = $this->walletExist($client->getId());
+            if (!$wallet) {
+              // Create a new Wallet entity
+              $wallet = new Wallet();
+              $wallet->setClient($client);
+            }
+            else {
+              $old_value = $wallet->getValue();
+            }
+            $wallet->setValue($value + $old_value);
+            $this->entityManager->persist($wallet);
+            $this->entityManager->flush();
+            return [
+              'code' => 200,
+              'message' => 'Wallet successfully recharged.',
+            ];
+          }
+          else {
+            throw new \Exception('Client not found.', 404);
+          }
+
+          
+        }
+        catch (\Exception $e) {
+          
+          return [
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+          ];
+        }
       }
   
       /**
@@ -124,4 +156,54 @@ class SuperWalletSOAP {
           // Implement order confirmation logic here.
           // Return the response as an array.
       }
+
+      /**
+       * Check client exist.
+       *
+       * @param int $document
+       * @param int $phone
+       *
+       * @return mixed
+       */
+      public function clientExist($document, $phone) {
+        $clientRepository = $this->entityManager->getRepository(Client::class);
+        $client = $clientRepository->findOneBy([
+          'document' => $document,
+          'phone' => $phone,
+        ]);
+        $response = $client instanceof Client ? $client : FALSE;
+        return $client;
+      }
+
+      /**
+       * Check wallet exist.
+       *
+       * @param int $clientId
+       *
+       * @return mixed
+       */
+      public function walletExist($clientId) {
+        $walletRepository = $this->entityManager->getRepository(Wallet::class);
+        $wallet = $walletRepository->findOneBy([
+          'client_id' => $clientId,
+        ]);
+        $response = $wallet instanceof Wallet ? $wallet : FALSE;
+        return $wallet;
+      }
+
+      /**
+       * Check valid token order.
+       *
+       * @param int $clientId
+       *
+       * @return mixed
+       */
+      // public function validToken($clientId) {
+      //   $walletRepository = $this->entityManager->getRepository(Wallet::class);
+      //   $wallet = $walletRepository->findOneBy([
+      //     'client_id' => $clientId,
+      //   ]);
+      //   $response = $wallet instanceof Wallet ? $wallet : FALSE;
+      //   return $wallet;
+      // }
 }

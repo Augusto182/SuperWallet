@@ -1,1 +1,29 @@
-<p>payment-confirm works!</p>
+<div class="container">
+    <h2>Payment confirm</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="token">Token:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="token"
+          name="token"
+          [(ngModel)]="formData.token"
+          required
+          pattern="[0-9]{6}"
+          maxlength="6"
+        />
+      </div>
+      <input type="hidden" class="form-control" id="session" name="session" [(ngModel)]="formData.session" required>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div *ngIf="showSuccessMessage" class="alert alert-success mt-3">
+      Payment approved.
+    </div>
+    <div *ngIf="showErrorMessage" class="alert alert-danger mt-3">
+      An error occurred. Please try again.
+    </div>
+</div>
+<div class="button-container">
+  <button routerLink="/">Done</button>
+</div>

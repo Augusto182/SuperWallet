@@ -15,6 +15,7 @@ export class LoadWalletComponent {
 
   showSuccessMessage = false;
   showErrorMessage = false;
+  showClientNotFoundMessage = false;
 
   constructor(private http: HttpClient) {}
 
@@ -27,12 +28,30 @@ export class LoadWalletComponent {
       next: (response) => {
         // Success callback
         console.log('Response:', response);
+        this.showSuccessMessage = true;
       },
       error: (error) => {
         // Error callback
-        console.error('Error:', error);
+        if (error.error.code == "404" && error.error.message == "Client not found.") {
+          this.showClientNotFoundMessage = true;
+        }
+        else {
+          this.showErrorMessage = true;
+        }
       },
     });
 
+  }
+
+  onDoneClick() {
+    // Reset form data and hide the success message
+    this.formData = {
+      phone: '',
+      document: '',
+      value: ''
+    };
+    this.showSuccessMessage = false;
+    this.showErrorMessage = false;
+    this.showClientNotFoundMessage = false;
   }
 }

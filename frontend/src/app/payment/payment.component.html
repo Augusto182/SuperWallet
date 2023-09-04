@@ -1,1 +1,33 @@
-<p>payment works!</p>
+<div class="container">
+    <h2>Payment</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="id">ID:</label>
+        <input type="text" class="form-control" id="id" name="id" [(ngModel)]="formData.document" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="formData.phone" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="formData.description" required>
+      </div>
+      <div class="form-group">
+        <label for="value">Value:</label>
+        <input type="number" class="form-control" id="value" name="value" [(ngModel)]="formData.value" required>
+      </div>
+      <input type="hidden" class="form-control" id="session" name="session" [(ngModel)]="formData.session" required>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div *ngIf="showSuccessMessage" class="alert alert-success mt-3">
+      Payment order created.
+    </div>
+    <div *ngIf="showErrorMessage" class="alert alert-danger mt-3">
+      An error occurred. Please try again.
+    </div>
+</div>
+<div class="button-container">
+  <button routerLink="/">Done</button>
+</div>
+

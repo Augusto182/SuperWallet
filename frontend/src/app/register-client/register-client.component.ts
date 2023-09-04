@@ -37,7 +37,6 @@ export class RegisterClientComponent {
       error: (error) => {
         // Error callback
         this.showErrorMessage = true;
-        console.error('Error:', error);
       },
     });
 

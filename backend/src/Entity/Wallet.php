@@ -16,21 +16,22 @@ class Wallet {
 
     #[ORM\ManyToOne(targetEntity: Client::class)]
     #[ORM\JoinColumn(name: "client_id", referencedColumnName: "id")]
-    protected $clientId;
+    protected $client_id;
 
     #[ORM\Column(type: "float")]
     protected $value;
+
     // Getters and setters for the above properties
     public function getId(): ?int {
         return $this->id;
     }
 
     public function getClient(): ?Client {
-        return $this->clientId;
+        return $this->client_id;
     }
 
     public function setClient(Client $clientId): self {
-        $this->clientId = $clientId;
+        $this->client_id = $clientId;
 
         return $this;
     }

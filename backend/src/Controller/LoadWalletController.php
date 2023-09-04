@@ -31,18 +31,24 @@ class LoadWalletController {
         }
 
         try {
-          // $this->soapClient->init();
-          // $response = $this->soapClient->instance->loadWallet([
-          //   'document' => $data['document'],
-          //   'mail' => $data['mail'],
-          //   'phone' => $data['phone'],
-          //   'name' => $data['name'],
-          // ]);
+          $this->soapClient->init();
+          $response = $this->soapClient->instance->loadwallet([
+            'document' => $data['document'],
+            'phone' => $data['phone'],
+            'value' => $data['value'],
+          ]);
 
-          $code = Response::HTTP_CREATED;
+          $rawResult = $this->soapClient->instance->__getLastResponse();
+          $x = $this->soapClient->XML2Array($rawResult);
+          $code = $x["SOAP-ENV_Body"]["ns1_loadWalletResponse"]["return"]["item"][0]["value"] ?? 0;
+          $message = $x["SOAP-ENV_Body"]["ns1_loadWalletResponse"]["return"]["item"][1]["value"] ?? 'unknown';
+          if ($code == 200) {
+            $code = Response::HTTP_CREATED;
+          }
+
           $response = [
             'code' => $code,
-            'message' => 'Recharge wallet success.',
+            'message' => $message,
           ];
         }
         catch (SoapFault $e) {

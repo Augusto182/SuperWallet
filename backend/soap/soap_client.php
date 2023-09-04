@@ -16,11 +16,10 @@ try {
   // $responseContent = $client->__getLastResponse();
 
   // Call SOAP methods using the client
-  $response = $client->registerClient([
+  $response = $client->loadWallet([
     'document' => 123456789,
-    'mail' => 'client@example.com',
-    'phone' => 1234567890,
-    'name' => 'John Doe',
+    'phone' => 555555555,
+    'value' => 10000,
   ]);
 
   $rawResult = $client->__getLastResponse();

@@ -23,6 +23,18 @@ services:
     App\Controller\RegisterClientController:
         public: true
         tags: ['controller.service_arguments']
+    App\Controller\LoadWalletController:
+        public: true
+        tags: ['controller.service_arguments']
+    App\Controller\CreateOrderController:
+        public: true
+        tags: ['controller.service_arguments']
+    App\Controller\ConfirmOrderController:
+        public: true
+        tags: ['controller.service_arguments']
+    App\Controller\CheckBalanceController:
+        public: true
+        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
