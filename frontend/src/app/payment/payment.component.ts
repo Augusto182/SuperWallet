@@ -17,6 +17,8 @@ export class PaymentComponent {
 
   showSuccessMessage = false;
   showErrorMessage = false;
+  showClientNotFoundMessage = false;
+  showInsufficientBalanceMessage = false;
 
   constructor(private http: HttpClient) {}
 
@@ -29,7 +31,7 @@ export class PaymentComponent {
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
     var options = { headers: headers };
-    this.http.post('http://rest.superwallet.loc/api/payment', this.formData, options).subscribe({
+    this.http.post('http://rest.superwallet.loc/api/createorder', this.formData, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);
@@ -37,8 +39,15 @@ export class PaymentComponent {
       },
       error: (error) => {
         // Error callback
-        this.showErrorMessage = true;
-        console.error('Error:', error);
+        if (error.error.code == "404" && error.error.message == "Client not found.") {
+          this.showClientNotFoundMessage = true;
+        }
+        else if (error.error.code == "400" && error.error.message == "Insufficient Balance.") {
+          this.showInsufficientBalanceMessage = true;
+        }
+        else {
+          this.showErrorMessage = true;
+        }
       },
     });
 

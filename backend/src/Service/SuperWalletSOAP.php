@@ -162,8 +162,49 @@ class SuperWalletSOAP {
        *   - 'message' (string): Response message.
        */
       public function createOrder($document, $phone, $value, $description, $session) {
-          // Implement order creation logic here.
-          // Return the response as an array.
+        try {
+          $client = $this->clientExist($document, $phone);
+          if ($client) {
+            $balance = 0;
+            $wallet = $this->walletExist($client->getId());
+            if ($wallet) {
+              $balance = $wallet->getValue();
+            }
+            if ($balance < $value) {
+              throw new \Exception('Insufficient Balance.', 400);
+            }
+            // Create a new Order entity
+            $token = $this->generateRandomSixDigitString();
+            $order = new Order();
+            $order->setWallet($wallet);
+            $order->setClient($client);
+            $order->setSession($session);
+            $order->setToken($token);
+            $order->setValue($value);
+            $order->setStatus('pending');
+            $order->setDescription($description);
+
+            // Persist the Client entity to the database
+            $this->entityManager->persist($client);
+            $this->entityManager->flush();
+
+            return [
+              'token' => $token,
+              'code' => 200,
+              'message' => 'Payment order created.',
+            ];
+          }
+          else {
+            throw new \Exception('Client not found.', 404);
+          }
+        }
+        catch (\Exception $e) {
+          
+          return [
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+          ];
+        }
       }
   
       /**
@@ -214,6 +255,16 @@ class SuperWalletSOAP {
         ]);
         $response = $wallet instanceof Wallet ? $wallet : FALSE;
         return $wallet;
+      }
+
+      /**
+       * Generate Random Six Digit String
+       */
+      public function generateRandomSixDigitString(): string {
+        $min = 100000;
+        $max = 999999;
+        $randomNumber = mt_rand($min, $max);
+        return (string) $randomNumber;
       }
 
       /**

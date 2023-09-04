@@ -32,7 +32,6 @@ class Wallet {
 
     public function setClient(Client $clientId): self {
         $this->client_id = $clientId;
-
         return $this;
     }
 

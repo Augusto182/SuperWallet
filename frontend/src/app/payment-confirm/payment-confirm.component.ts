@@ -26,7 +26,7 @@ export class PaymentConfirmComponent {
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
     var options = { headers: headers };
-    this.http.post('http://rest.superwallet.loc/api/paymentconfirm', this.formData, options).subscribe({
+    this.http.post('http://rest.superwallet.loc/api/confirmorder', this.formData, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);

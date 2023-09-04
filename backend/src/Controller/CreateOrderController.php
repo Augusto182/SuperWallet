@@ -26,24 +26,22 @@ class CreateOrderController {
     public function createorder(Request $request): JsonResponse {
         $data = json_decode($request->getContent(), TRUE);
 
-        // if (empty($data['name']) || empty($data['document']) || empty($data['mail']) || empty($data['phone']) ) {
-        //   throw new NotFoundHttpException('Expecting mandatory parameters!');
-        // }
+        if (empty($data['phone']) || empty($data['document']) || empty($data['value']) || empty($data['description']) ) {
+          throw new NotFoundHttpException('Expecting mandatory parameters!');
+        }
 
         try {
-          // $this->soapClient->init();
-          // $response = $this->soapClient->instance->CreateOrder([
-          //   'document' => $data['document'],
-          //   'mail' => $data['mail'],
-          //   'phone' => $data['phone'],
-          //   'name' => $data['name'],
-          // ]);
+          $this->soapClient->init();
+          $response = $this->soapClient->instance->createOrder([
+            'document' => $data['document'],
+            'phone' => $data['phone'],
+            'value' => $data['value'],
+            'description' => $data['description'],
+            'session' => 'session',
+          ]);
 
-          $code = Response::HTTP_CREATED;
-          $response = [
-            'code' => $code,
-            'message' => 'Order created successfully xD.',
-          ];
+          $response = $this->soapClient->getResponse('createOrder');
+          $code = $response['code'] ?? 500;
         }
         catch (SoapFault $e) {
           $code = $e->getCode();

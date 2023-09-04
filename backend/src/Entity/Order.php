@@ -103,4 +103,13 @@ class Order {
         return $this;
     }
 
+    public function getClient(): ?Client {
+        return $this->clientId;
+    }
+
+    public function setClient(Client $clientId): self {
+        $this->clientId = $clientId;
+        return $this;
+    }
+
 }
