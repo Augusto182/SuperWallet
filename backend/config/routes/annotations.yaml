@@ -1,4 +1,0 @@
-# config/routes/annotations.yaml
-RegisterClientController:
-    resource: ../../src/Controller/RegisterClientController.php
-    type: annotation
