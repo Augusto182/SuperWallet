@@ -1,6 +1,6 @@
 <div class="container">
     <h2>Register Client</h2>
-    <form (ngSubmit)="onSubmit()">
+    <form *ngIf="!showSuccessMessage" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" class="form-control" id="name" name="name" [(ngModel)]="formData.name" required>
@@ -11,11 +11,11 @@
       </div>
       <div class="form-group">
         <label for="id">ID:</label>
-        <input type="text" class="form-control" id="id" name="id" [(ngModel)]="formData.id" required>
+        <input type="text" class="form-control" id="document" name="document" [(ngModel)]="formData.document" required>
       </div>
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="formData.email" required>
+        <label for="mail">mail:</label>
+        <input type="mail" class="form-control" id="mail" name="mail" [(ngModel)]="formData.mail" required>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -25,5 +25,7 @@
     <div *ngIf="showErrorMessage" class="alert alert-danger mt-3">
       An error occurred. Please try again.
     </div>
-  </div>
-  
+</div>
+<div class="button-container">
+  <button (click)="onDoneClick()" routerLink="/">Done</button>
+</div>

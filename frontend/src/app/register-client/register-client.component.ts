@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-register-client',
   templateUrl: './register-client.component.html',
+  styleUrls: ['./register-client.component.scss']
 })
 export class RegisterClientComponent {
   formData = {
     name: '',
     phone: '',
-    id: '',
-    email: '',
+    document: '',
+    mail: '',
   };
 
   showSuccessMessage = false;
@@ -23,16 +24,34 @@ export class RegisterClientComponent {
     this.showErrorMessage = false;
 
     // Send a POST request to the API with the form data
-    this.http.post('http://rest.superwallet.loc/api/registerclient', this.formData).subscribe({
+    const headers = new HttpHeaders()
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*');
+    var options = { headers: headers };
+    this.http.post('http://rest.superwallet.loc/api/registerclient', this.formData, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);
+        this.showSuccessMessage = true;
       },
       error: (error) => {
         // Error callback
+        this.showErrorMessage = true;
         console.error('Error:', error);
       },
     });
 
+  }
+
+  onDoneClick() {
+    // Reset form data and hide the success message
+    this.formData = {
+      name: '',
+      phone: '',
+      document: '',
+      mail: ''
+    };
+    this.showSuccessMessage = false;
+    this.showErrorMessage = false;
   }
 }

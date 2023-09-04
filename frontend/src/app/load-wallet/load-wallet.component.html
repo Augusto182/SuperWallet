@@ -1,1 +1,27 @@
-<p>load-wallet works!</p>
+<div class="container">
+    <h2>Load Wallet</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="id">ID:</label>
+        <input type="text" class="form-control" id="id" name="id" [(ngModel)]="formData.document" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="formData.phone" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Value:</label>
+        <input type="text" class="form-control" id="value" name="value" [(ngModel)]="formData.value" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div *ngIf="showSuccessMessage" class="alert alert-success mt-3">
+      Client registered successfully.
+    </div>
+    <div *ngIf="showErrorMessage" class="alert alert-danger mt-3">
+      An error occurred. Please try again.
+    </div>
+</div>
+<div class="button-container">
+  <button routerLink="/">Done</button>
+</div>
