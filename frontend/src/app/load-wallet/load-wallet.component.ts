@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-load-wallet',
@@ -22,9 +23,10 @@ export class LoadWalletComponent {
   onSubmit() {
     this.showSuccessMessage = false;
     this.showErrorMessage = false;
+    this.showClientNotFoundMessage = false;
 
     // Send a POST request to the API with the form data
-    this.http.post('http://rest.superwallet.loc/api/loadwallet', this.formData).subscribe({
+    this.http.post(`${environment.apiBaseUrl}/loadwallet`, this.formData).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);

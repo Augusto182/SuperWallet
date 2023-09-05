@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-register-client',
@@ -28,7 +29,7 @@ export class RegisterClientComponent {
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
     var options = { headers: headers };
-    this.http.post('http://rest.superwallet.loc/api/registerclient', this.formData, options).subscribe({
+    this.http.post(`${environment.apiBaseUrl}/registerclient`, this.formData, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);

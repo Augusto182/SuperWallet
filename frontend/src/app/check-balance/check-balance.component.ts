@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-check-balance',
@@ -32,7 +33,7 @@ export class CheckBalanceComponent {
       .set("phone", this.formData.phone)
       .set("document", this.formData.document);
     var options = { headers: headers, params:queryParams };
-    this.http.get<{ balance: string }>('http://rest.superwallet.loc/api/checkbalance', options).subscribe({
+    this.http.get<{ balance: string }>(`${environment.apiBaseUrl}/checkbalance`, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);

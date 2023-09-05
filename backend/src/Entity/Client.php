@@ -14,13 +14,13 @@ class Client {
     #[ORM\Column(type: "integer")]
     protected $id;
 
-    #[ORM\Column(type: "integer", unique: true)]
+    #[ORM\Column(type: "bigint", unique: true)]
     protected $document;
 
     #[ORM\Column(type: "string")]
     protected $mail;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "bigint")]
     protected $phone;
 
     #[ORM\Column(type: "string")]

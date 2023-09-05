@@ -8,15 +8,17 @@ class SoapClientService {
 
   public $instance;
 
+  const SOAP_URL = 'http://api.superwallet.loc';
+
   /**
    * Init
    */
   public function init() {
 
-    $wsdl = 'http://api.superwallet.loc/soap/soap_server.wsdl';
+    $wsdl = self::SOAP_URL . '/soap/soap_server.wsdl';
     $this->instance = new SoapClient($wsdl,[
       'cache_wsdl' => WSDL_CACHE_NONE,
-      'location' => 'http://api.superwallet.loc/soap/soap_server.php',
+      'location' => self::SOAP_URL . '/soap/soap_server.php',
       'trace' => TRUE,
     ]);
   }

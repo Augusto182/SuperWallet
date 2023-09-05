@@ -41,6 +41,10 @@ class RegisterClientController {
 
           $response = $this->soapClient->getResponse('registerClient');
           $code = $response['code'] ?? 500;
+          if ($code == "1062") {
+            $code = 200;
+            $response['message'] = 'Client already exist';
+          } 
         }
         catch (SoapFault $e) {
           $code = $e->getCode();

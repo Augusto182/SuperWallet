@@ -28,13 +28,15 @@ export class PaymentComponent {
   onSubmit() {
     this.showSuccessMessage = false;
     this.showErrorMessage = false;
+    this.showClientNotFoundMessage = false;
+    this.showInsufficientBalanceMessage = false;
 
     // Send a POST request to the API with the form data
     const headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
     var options = { headers: headers };
-    this.http.post<{ session: string }>('http://rest.superwallet.loc/api/createorder', this.formData, options).subscribe({
+    this.http.post<{ session: string }>(`${environment.apiBaseUrl}/createorder`, this.formData, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);
@@ -69,5 +71,7 @@ export class PaymentComponent {
     };
     this.showSuccessMessage = false;
     this.showErrorMessage = false;
+    this.showClientNotFoundMessage = false;
+    this.showInsufficientBalanceMessage = false;
   }
 }
