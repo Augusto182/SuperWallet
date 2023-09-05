@@ -1,13 +1,13 @@
 <?php
-// src/Entity/Order.php
+// src/Entity/Orders.php
 
 namespace SuperWallet\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "order")]
-class Order {
+#[ORM\Table(name: "orders")]
+class Orders {
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

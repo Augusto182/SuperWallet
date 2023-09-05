@@ -101,6 +101,26 @@
                 </xsd:complexType>
             </xsd:element>
 
+            <!-- Define the input message for 'confirmOrder' operation -->
+            <xsd:element name="confirmOrder">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="token" type="xsd:string"/>
+                        <xsd:element name="session" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- Define the output message for 'confirmOrder' operation -->
+            <xsd:element name="confirmOrderResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="code" type="xsd:integer"/>
+                        <xsd:element name="message" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
         </xsd:schema>
     </types>
 
@@ -138,6 +158,14 @@
         <part name="parameters" element="tns:createOrderResponse"/>
     </message>
 
+    <message name="confirmOrderMessage">
+        <part name="parameters" element="tns:confirmOrder"/>
+    </message>
+    
+    <message name="confirmOrderResponseMessage">
+        <part name="parameters" element="tns:confirmOrderResponse"/>
+    </message>
+
 
     <portType name="SuperWalletSOAPPortType">
         <!-- Add the 'registerClient' operation -->
@@ -159,6 +187,11 @@
         <operation name="createOrder">
             <input message="tns:createOrderMessage"/>
             <output message="tns:createOrderResponseMessage"/>
+        </operation>
+        <!-- Add the 'confirmOrder' operation -->
+        <operation name="confirmOrder">
+            <input message="tns:confirmOrderMessage"/>
+            <output message="tns:confirmOrderResponseMessage"/>
         </operation>
     </portType>
 
@@ -196,6 +229,16 @@
         </operation>
         <!-- Add the 'createOrder' operation -->
         <operation name="createOrder">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <!-- Add the 'confirmOrder' operation -->
+        <operation name="confirmOrder">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>

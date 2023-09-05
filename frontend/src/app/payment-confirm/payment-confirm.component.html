@@ -21,9 +21,9 @@
       Payment approved.
     </div>
     <div *ngIf="showErrorMessage" class="alert alert-danger mt-3">
-      An error occurred. Please try again.
+      Invalid token or Communication Error. Please try again.
     </div>
 </div>
 <div class="button-container">
-  <button routerLink="/">Done</button>
+  <button (click)="onDoneClick()" routerLink="/">Done</button>
 </div>

@@ -4,7 +4,6 @@ namespace App\Controller;
 use SoapFault;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\SoapClientService;
@@ -26,24 +25,19 @@ class ConfirmOrderController {
     public function confirmorder(Request $request): JsonResponse {
         $data = json_decode($request->getContent(), TRUE);
 
-        // if (empty($data['name']) || empty($data['document']) || empty($data['mail']) || empty($data['phone']) ) {
-        //   throw new NotFoundHttpException('Expecting mandatory parameters!');
-        // }
+        if (empty($data['token']) || empty($data['session'])) {
+          throw new NotFoundHttpException('Expecting mandatory parameters!');
+        }
 
         try {
-          // $this->soapClient->init();
-          // $response = $this->soapClient->instance->confirmOrder([
-          //   'document' => $data['document'],
-          //   'mail' => $data['mail'],
-          //   'phone' => $data['phone'],
-          //   'name' => $data['name'],
-          // ]);
+          $this->soapClient->init();
+          $response = $this->soapClient->instance->createOrder([
+            'token' => $data['token'],
+            'session' => 'session',
+          ]);
 
-          $code = Response::HTTP_CREATED;
-          $response = [
-            'code' => $code,
-            'message' => 'Client registered successfully xD.',
-          ];
+          $response = $this->soapClient->getResponse('createOrder');
+          $code = $response['code'] ?? 500;
         }
         catch (SoapFault $e) {
           $code = $e->getCode();

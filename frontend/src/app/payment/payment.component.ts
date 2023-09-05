@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -20,7 +21,7 @@ export class PaymentComponent {
   showClientNotFoundMessage = false;
   showInsufficientBalanceMessage = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
     this.showSuccessMessage = false;
@@ -36,6 +37,7 @@ export class PaymentComponent {
         // Success callback
         console.log('Response:', response);
         this.showSuccessMessage = true;
+        this.router.navigate(['payment-confirm']);
       },
       error: (error) => {
         // Error callback

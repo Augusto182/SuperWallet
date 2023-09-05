@@ -4,10 +4,13 @@ namespace SuperWallet\Service;
 
 use SuperWallet\Entity\Client;
 use SuperWallet\Entity\Wallet;
-use SuperWallet\Entity\Order;
+use SuperWallet\Entity\Orders;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SuperWalletSOAP {
+
+    const PENDING_STATUS = 0;
+    const CONFIRMED_STATUS = 1;
 
     private $entityManager;
 
@@ -29,7 +32,7 @@ class SuperWalletSOAP {
      *   - 'message' (string): Response message.
      */
     public function registerClient($document, $mail, $phone, $name) {
-        try {
+      try {
           // Create a new Client entity
           $client = new Client();
           $client->setDocument($document);
@@ -45,15 +48,15 @@ class SuperWalletSOAP {
             'code' => 200,
             'message' => 'Client registered successfully.',
           ];
-        }
-        catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
           
           return [
             'code' => $e->getCode(),
             'message' => $e->getMessage(),
           ];
-        }
       }
+    }
   
       /**
        * Load funds into a wallet.
@@ -151,8 +154,8 @@ class SuperWalletSOAP {
        *
        * @param int $document
        * @param int $phone
-       * @param float $value
        * @param string $description
+       * @param float $value
        * @param string $session
        *
        * @return array
@@ -161,7 +164,8 @@ class SuperWalletSOAP {
        *   - 'code' (int): Response code.
        *   - 'message' (string): Response message.
        */
-      public function createOrder($document, $phone, $value, $description, $session) {
+      public function createOrder($document, $phone, $description, $value, $session) {
+        $value = (float) $value;
         try {
           $client = $this->clientExist($document, $phone);
           if ($client) {
@@ -175,17 +179,17 @@ class SuperWalletSOAP {
             }
             // Create a new Order entity
             $token = $this->generateRandomSixDigitString();
-            $order = new Order();
+            $order = new Orders();
             $order->setWallet($wallet);
             $order->setClient($client);
             $order->setSession($session);
             $order->setToken($token);
             $order->setValue($value);
-            $order->setStatus('pending');
+            $order->setStatus(self::PENDING_STATUS);
             $order->setDescription($description);
 
             // Persist the Client entity to the database
-            $this->entityManager->persist($client);
+            $this->entityManager->persist($order);
             $this->entityManager->flush();
 
             return [
@@ -210,7 +214,7 @@ class SuperWalletSOAP {
       /**
        * Confirm an order.
        *
-       * @param int $token
+       * @param string $token
        * @param string $session
        *
        * @return array
@@ -219,8 +223,40 @@ class SuperWalletSOAP {
        *   - 'message' (string): Response message.
        */
       public function confirmOrder($token, $session) {
-          // Implement order confirmation logic here.
-          // Return the response as an array.
+        try {
+          $order = $this->validToken($token, $session);
+          if ($order) {
+            if ($order->getStatus() == self::CONFIRMED_STATUS) {
+              throw new \Exception('Order already confirmed.', 400);
+            }
+            $wallet = $this->walletExist($order->getClient());
+            if ($wallet) {
+              $new_balance = $wallet->getValue()-$order->getValue();
+              $wallet->setValue($new_balance);
+              $this->entityManager->persist($wallet);
+              $this->entityManager->flush();
+            }
+
+            $order->setStatus(self::CONFIRMED_STATUS);
+            $this->entityManager->persist($order);
+            $this->entityManager->flush();
+
+            return [
+              'code' => 200,
+              'message' => 'Payment order confirmed.',
+            ];
+          }
+          else {
+            throw new \Exception('Invalid token.', 400);
+          }
+        }
+        catch (\Exception $e) {
+          
+          return [
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+          ];
+        }
       }
 
       /**
@@ -270,16 +306,18 @@ class SuperWalletSOAP {
       /**
        * Check valid token order.
        *
-       * @param int $clientId
+       * @param string $token
+       * @param string $session
        *
        * @return mixed
        */
-      // public function validToken($clientId) {
-      //   $walletRepository = $this->entityManager->getRepository(Wallet::class);
-      //   $wallet = $walletRepository->findOneBy([
-      //     'client_id' => $clientId,
-      //   ]);
-      //   $response = $wallet instanceof Wallet ? $wallet : FALSE;
-      //   return $wallet;
-      // }
+      public function validToken($token, $session) {
+        $orderRepository = $this->entityManager->getRepository(Orders::class);
+        $order = $orderRepository->findOneBy([
+          'token' => $token,
+          'session' => $session,
+        ]);
+        $response = $order instanceof Orders ? $order : FALSE;
+        return $order;
+      }
 }
