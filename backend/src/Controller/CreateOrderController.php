@@ -4,9 +4,11 @@ namespace App\Controller;
 use SoapFault;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use App\Service\SoapClientService;
 
 /**
@@ -17,9 +19,16 @@ use App\Service\SoapClientService;
 class CreateOrderController {
 
     private $soapClient;
+    private $requestStack;
+    private $mailer;
 
-    public function __construct(SoapClientService $soapClient) {
+    public function __construct(
+      SoapClientService $soapClient,
+      RequestStack $requestStack,
+      MailerInterface $mailer) {
         $this->soapClient = $soapClient;
+        $this->requestStack = $requestStack;
+        $this->mailer = $mailer;
     }
 
     #[Route("createorder", name: "createorder", methods: ["POST"])]
@@ -31,17 +40,26 @@ class CreateOrderController {
         }
 
         try {
+          $session = $this->requestStack->getSession();
+          $session->start();
+          $session_id = $session->getId();
           $this->soapClient->init();
           $response = $this->soapClient->instance->createOrder([
             'document' => $data['document'],
             'phone' => $data['phone'],
             'value' => $data['value'],
             'description' => $data['description'],
-            'session' => 'session',
+            'session' => $session_id,
           ]);
 
           $response = $this->soapClient->getResponse('createOrder');
+          $response['session'] = $session_id;
           $code = $response['code'] ?? 500;
+
+          $response['mail_sent'] = $this->sendMail([
+            'mail' => $response['mail'],
+            'token' => $response['token'],
+          ]);
         }
         catch (SoapFault $e) {
           $code = $e->getCode();
@@ -52,6 +70,31 @@ class CreateOrderController {
         }
 
         return new JsonResponse($response, $code);
+    }
+
+    /**
+     * Send Mail
+     */
+    private function sendMail($data) {
+      $to = $data['mail'];
+      $subject = "Superwallet payment confirmation";
+      $txt = "Superwallet payment confirmation.\r\nToken: " . $data['token'];
+      $headers = "From: augusto@sucorreo.org";
+      //mail($to,$subject,$txt,$headers);    
+      $email = (new Email())
+          ->from('augusto@sucorreo.org')
+          ->to($to)
+          ->subject($subject)
+          ->text($txt);
+      
+      $r = TRUE;
+      try {
+        $this->mailer->send($email);
+      }
+      catch (\Exception $e) {
+        $r = FALSE;
+      }
+      return $r;
     }
 
 }

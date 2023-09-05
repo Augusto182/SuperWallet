@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { DataService } from '../shared/data.service';
 
 @Component({
   selector: 'app-payment',
@@ -21,7 +23,7 @@ export class PaymentComponent {
   showClientNotFoundMessage = false;
   showInsufficientBalanceMessage = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private dataService: DataService) {}
 
   onSubmit() {
     this.showSuccessMessage = false;
@@ -32,11 +34,12 @@ export class PaymentComponent {
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*');
     var options = { headers: headers };
-    this.http.post('http://rest.superwallet.loc/api/createorder', this.formData, options).subscribe({
+    this.http.post<{ session: string }>('http://rest.superwallet.loc/api/createorder', this.formData, options).subscribe({
       next: (response) => {
         // Success callback
         console.log('Response:', response);
         this.showSuccessMessage = true;
+        this.dataService.sendData({ session: response.session});
         this.router.navigate(['payment-confirm']);
       },
       error: (error) => {

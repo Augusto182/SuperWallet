@@ -194,6 +194,7 @@ class SuperWalletSOAP {
 
             return [
               'token' => $token,
+              'mail' => $client->getMail(),
               'code' => 200,
               'message' => 'Payment order created.',
             ];

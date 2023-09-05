@@ -32,7 +32,7 @@ class LoadWalletController {
 
         try {
           $this->soapClient->init();
-          $response = $this->soapClient->instance->loadWSallet([
+          $response = $this->soapClient->instance->loadWallet([
             'document' => $data['document'],
             'phone' => $data['phone'],
             'value' => $data['value'],

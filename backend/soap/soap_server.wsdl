@@ -94,7 +94,8 @@
             <xsd:element name="createOrderResponse">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="session" type="xsd:string"/>
+                        <xsd:element name="token" type="xsd:string"/>
+                        <xsd:element name="mail" type="xsd:string"/>
                         <xsd:element name="code" type="xsd:integer"/>
                         <xsd:element name="message" type="xsd:string"/>
                     </xsd:sequence>

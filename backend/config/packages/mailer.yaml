@@ -1,0 +1,4 @@
+framework:
+    mailer:
+        dsn: 'smtp://smtp.migadu.com:456?encryption=ssl&auth_mode=login&username=augusto@sucorreo.org&password=corneadoraexactapedreta'
+

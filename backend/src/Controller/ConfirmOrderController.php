@@ -31,12 +31,12 @@ class ConfirmOrderController {
 
         try {
           $this->soapClient->init();
-          $response = $this->soapClient->instance->createOrder([
+          $response = $this->soapClient->instance->confirmOrder([
             'token' => $data['token'],
-            'session' => 'session',
+            'session' => $data['session'],
           ]);
 
-          $response = $this->soapClient->getResponse('createOrder');
+          $response = $this->soapClient->getResponse('confirmOrder');
           $code = $response['code'] ?? 500;
         }
         catch (SoapFault $e) {

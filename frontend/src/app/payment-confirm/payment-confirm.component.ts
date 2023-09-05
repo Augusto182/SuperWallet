@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DataService } from '../shared/data.service';
 
 @Component({
   selector: 'app-payment-confirm',
@@ -15,7 +16,11 @@ export class PaymentConfirmComponent {
   showSuccessMessage = false;
   showErrorMessage = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private dataService: DataService) {
+    this.dataService.data$.subscribe((data) => {
+      this.formData.session = data.session;
+    });
+  }
 
   onSubmit() {
     this.showSuccessMessage = false;
